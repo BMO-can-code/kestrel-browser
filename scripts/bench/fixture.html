@@ -1,0 +1,28 @@
+<!doctype html>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>bench fixture</title>
+    <style>
+      body { font: 16px/1.5 -apple-system, sans-serif; margin: 40px; }
+      .card { border: 1px solid #ccc; border-radius: 8px; padding: 16px; margin: 12px 0; }
+    </style>
+  </head>
+  <body>
+    <h1>Benchmark fixture</h1>
+    <p>Static page used to give every test tab the same render cost.</p>
+    <div id="cards"></div>
+    <script>
+      const root = document.getElementById("cards");
+      for (let i = 0; i < 40; i++) {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.textContent = `Card ${i} — ${"lorem ipsum ".repeat(12)}`;
+        root.appendChild(card);
+      }
+    </script>
+  </body>
+</html>
