@@ -14,4 +14,5 @@ ac_add_options --disable-crashreporter
 ac_add_options --enable-strip
 
 # Keep a single objdir under engine/ (warden rule: one objdir only).
-mk_add_options MOZ_OBJDIR=$topsrcdir/engine/objdir
+# Uses default obj-* naming so CI's `find obj-*/dist` locates it.
+mk_add_options MOZ_OBJDIR=$topsrcdir/obj-kestrel
