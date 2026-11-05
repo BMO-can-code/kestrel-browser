@@ -26,7 +26,11 @@ locales/firefox-l10n/
 !src/toolkit/themes/shared/design-system/dist/
 .DS_Store
 
-mozconfig
+# Root mozconfig is user-local, not committed
+/mozconfig
+
+# Configs under configs/ are part of the repo and must be committed
+!configs/**/mozconfig
 
 build/signing/env/
 build/signing/nss_config/

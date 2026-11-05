@@ -1,0 +1,19 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Common build configuration for all platforms.
+# Templated by surfer: ${name}, ${vendor}, ${appId}, ${brandingDir},
+# ${binName}, ${changeset}.
+
+ac_add_options --enable-optimize
+ac_add_options --disable-debug
+ac_add_options --disable-debug-symbols
+ac_add_options --disable-tests
+ac_add_options --disable-crashreporter
+ac_add_options --enable-strip
+ac_add_options --disable-debuginfo
+ac_add_options --disable-elf-tidy
+
+# Keep a single objdir under engine/ (warden rule: one objdir only).
+mk_add_options MOZ_OBJDIR=$topsrcdir/engine/objdir
