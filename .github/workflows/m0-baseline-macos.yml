@@ -98,7 +98,7 @@ jobs:
           command -v gtar || brew install gnu-tar
 
       - name: Install npm dependencies
-        run: npm ci --no-audit --no-fund
+        run: npm ci --no-audit --no-fund --ignore-scripts
 
       - name: Download Firefox source
         run: npm run download
