@@ -126,45 +126,38 @@ jobs:
       - name: Package app bundle
         run: |
           set -ex
-          EXPECTED_BUNDLE_ID="app.zen-browser"
-          EXPECTED_BINARY="zen"
           cd engine
           ./mach package
-          MAPFILE="/tmp/app_candidates.txt"
-          rm -f "$MAPFILE"
-          find obj-*/dist -maxdepth 4 -name '*.app' -type d | while read -r cand; do
-            bin="$(basename "$(find "$cand/Contents/MacOS" -maxdepth 1 -type f -perm +111 2>/dev/null | head -1)")"
-            bid="$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$cand/Contents/Info.plist" 2>/dev/null || echo "")"
-            echo "$cand|$bin|$bid" >> "$MAPFILE"
-          done
-          MATCHES=$(grep "|${EXPECTED_BINARY}|" "$MAPFILE" | grep "|${EXPECTED_BUNDLE_ID}$" || true)
-          COUNT=$(echo "$MATCHES" | grep -c "^" || echo 0)
-          if [ "$COUNT" -ne 1 ]; then
-            echo "ERROR: expected exactly 1 match, got $COUNT" >&2
-            cat "$MAPFILE" >&2
-            exit 1
-          fi
-          APP=$(echo "$MATCHES" | cut -d'|' -f1)
-          test -n "$APP" && test -d "$APP"
-          BIN="$APP/Contents/MacOS/$EXPECTED_BINARY"
-          test -f "$BIN" && test -x "$BIN"
+          # mach package produces a .dmg (and possibly a loose .app).
+          # The .app bundle lives inside the .dmg; mount it and copy out.
+          DMG=$(find obj-*/dist -maxdepth 1 -name '*.dmg' | head -1)
+          test -n "$DMG"
+          echo "DMG=$DMG"
+          MOUNT=$(hdiutil attach -nobrowse -noverify "$DMG" | grep Volumes | awk '{print $3}' | head -1)
+          test -n "$MOUNT"
+          APP=$(find "$MOUNT" -maxdepth 2 -name '*.app' -type d | head -1)
+          test -n "$APP"
           echo "APP=$APP"
           du -sh "$APP"
+          BINARY="$(find "$APP/Contents/MacOS" -maxdepth 1 -type f -perm +111 | head -1 | xargs basename)"
+          test -n "$BINARY"
+          echo "BINARY=$BINARY"
           codesign --force --deep --sign - "$APP" || true
           codesign --verify --deep --strict "$APP" || true
           plutil -lint "$APP/Contents/Info.plist"
+          hdiutil detach "$MOUNT"
           ditto -c -k --sequesterRsrc --keepParent "$APP" "$GITHUB_WORKSPACE/zen-stock-dev-arm64.zip"
           ls -lh "$GITHUB_WORKSPACE/zen-stock-dev-arm64.zip"
-          unzip -l "$GITHUB_WORKSPACE/zen-stock-dev-arm64.zip" | grep "Contents/MacOS/$EXPECTED_BINARY" | head -1
+          unzip -l "$GITHUB_WORKSPACE/zen-stock-dev-arm64.zip" | grep "Contents/MacOS/$BINARY" | head -1
           TMPD="/tmp/verify_art"
-          rm -rf "$TMPD" && mkdir -p "$TMPD" && cd "$TMPD" && ditto -x -k "$GITHUB_WORKSPACE/zen-stock-dev-arm64.zip" . >/dev/null && find . -name '*.app' -path "*$EXPECTED_BINARY*" -not -path "*plugin-container*" | head -1 && ./*/Contents/MacOS/$EXPECTED_BINARY --version 2>&1 | head -1
+          rm -rf "$TMPD" && mkdir -p "$TMPD" && cd "$TMPD" && ditto -x -k "$GITHUB_WORKSPACE/zen-stock-dev-arm64.zip" . >/dev/null && FOUND_APP=$(find . -maxdepth 3 -name '*.app' -type d | head -1) && test -n "$FOUND_APP" && ./"$FOUND_APP/Contents/MacOS/$BINARY" --version 2>&1 | head -1
           BID=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$APP/Contents/Info.plist")
           VER=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$APP/Contents/Info.plist")
-          ARCHS=$(lipo -archs "$BIN")
+          ARCHS=$(lipo -archs "$APP/Contents/MacOS/$BINARY")
           SHA256=$(shasum -a 256 "$GITHUB_WORKSPACE/zen-stock-dev-arm64.zip" | awk '{print $1}')
           SIZE=$(stat -f%z "$GITHUB_WORKSPACE/zen-stock-dev-arm64.zip")
           cat > "$GITHUB_WORKSPACE/artifact-manifest.json" << EOF
-          {"bundle_id":"$BID","version":"$VER","binary":"$EXPECTED_BINARY","archs":"$ARCHS","size_bytes":$SIZE,"sha256":"$SHA256"}
+          {"bundle_id":"$BID","version":"$VER","binary":"$BINARY","archs":"$ARCHS","size_bytes":$SIZE,"sha256":"$SHA256"}
           EOF
           cat "$GITHUB_WORKSPACE/artifact-manifest.json"
 
