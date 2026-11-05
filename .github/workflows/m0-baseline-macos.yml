@@ -146,15 +146,15 @@ jobs:
           codesign --force --deep --sign - "$APP" || true
           codesign --verify --deep --strict "$APP" || true
           plutil -lint "$APP/Contents/Info.plist"
-          hdiutil detach "$MOUNT"
+          BID=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$APP/Contents/Info.plist")
+          VER=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$APP/Contents/Info.plist")
+          ARCHS=$(lipo -archs "$APP/Contents/MacOS/$BINARY")
           ditto -c -k --sequesterRsrc --keepParent "$APP" "$GITHUB_WORKSPACE/zen-stock-dev-arm64.zip"
           ls -lh "$GITHUB_WORKSPACE/zen-stock-dev-arm64.zip"
           unzip -l "$GITHUB_WORKSPACE/zen-stock-dev-arm64.zip" | grep "Contents/MacOS/$BINARY" | head -1
           TMPD="/tmp/verify_art"
           rm -rf "$TMPD" && mkdir -p "$TMPD" && cd "$TMPD" && ditto -x -k "$GITHUB_WORKSPACE/zen-stock-dev-arm64.zip" . >/dev/null && FOUND_APP=$(find . -maxdepth 3 -name '*.app' -type d | head -1) && test -n "$FOUND_APP" && ./"$FOUND_APP/Contents/MacOS/$BINARY" --version 2>&1 | head -1
-          BID=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$APP/Contents/Info.plist")
-          VER=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$APP/Contents/Info.plist")
-          ARCHS=$(lipo -archs "$APP/Contents/MacOS/$BINARY")
+          hdiutil detach "$MOUNT"
           SHA256=$(shasum -a 256 "$GITHUB_WORKSPACE/zen-stock-dev-arm64.zip" | awk '{print $1}')
           SIZE=$(stat -f%z "$GITHUB_WORKSPACE/zen-stock-dev-arm64.zip")
           cat > "$GITHUB_WORKSPACE/artifact-manifest.json" << EOF
