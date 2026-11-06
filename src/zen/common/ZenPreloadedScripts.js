@@ -33,6 +33,8 @@
     "chrome://browser/content/zen-components/ZenLittleArc.mjs",
     "chrome://browser/content/zen-components/ZenEasels.mjs",
     "chrome://browser/content/zen-components/ZenTabNotes.mjs",
+    "chrome://browser/content/zen-components/ZenVideoPreview.mjs",
+    "chrome://browser/content/zen-components/ZenArcImport.mjs",
   ];
 
   for (let script of scripts) {

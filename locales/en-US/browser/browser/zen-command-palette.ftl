@@ -84,3 +84,11 @@ easel-title = Easel
 # Tab notes
 zen-action-tab-notes = Tab Notes
 zen-action-toggle-tab-notes = Toggle Tab Notes
+
+# Arc import
+zen-action-import-from-arc = Import from Arc
+
+# Video preview
+zen-action-toggle-video-preview = Toggle Video Preview
+video-preview-title = Video Preview
+video-preview-gestures = Gesture controls enabled

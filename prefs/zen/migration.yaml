@@ -13,3 +13,10 @@
 
 - name: zen.migration.bookmarks-as-pinned-folders.max-tabs
   value: 250
+
+- name: zen.migration.arc-import.enabled
+  value: false
+  type: bool
+
+- name: zen.migration.arc-import.last-imported
+  value: 0

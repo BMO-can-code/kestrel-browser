@@ -443,6 +443,41 @@ const globalActionsTemplate = [
     },
     icon: "chrome://browser/skin/zen-icons/note-indicator.svg",
   },
+  {
+    l10nId: "zen-action-import-from-arc",
+    command: window => {
+      const { ZenArcImport } = ChromeUtils.importESModule(
+        "chrome://browser/content/zen-components/ZenArcImport.mjs",
+        { global: "current" }
+      );
+      ZenArcImport.importFromArc(window).then(result => {
+        if (result.success) {
+          Services.prefs.setIntPref(
+            "zen.migration.arc-import.last-imported",
+            Date.now()
+          );
+          Services.obs.notifyObservers(null, "zen-arc-import-success", null);
+        } else {
+          Services.obs.notifyObservers(null, "zen-arc-import-failed", null);
+        }
+      });
+    },
+    isAvailable: window => {
+      return Services.prefs.getBoolPref("zen.migration.arc-import.enabled", false);
+    },
+    icon: "chrome://browser/skin/zen-icons/archive.svg",
+  },
+  {
+    l10nId: "zen-action-toggle-video-preview",
+    command: () => {
+      Services.prefs.setBoolPref(
+        "zen.video-preview.enabled",
+        !Services.prefs.getBoolPref("zen.video-preview.enabled", false)
+      );
+    },
+    isAvailable: () => true,
+    icon: "chrome://browser/skin/zen-icons/video.svg",
+  },
 ];
 
 export function formatValueSync(l10nId) {

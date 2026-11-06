@@ -15,3 +15,8 @@ migration-wizard-progress-success-zen-spaces =
         [one] { $quantity } space
        *[other] { $quantity } spaces
     }
+
+# Arc import
+arc-import-success = Imported { $spaces } space(s) and { $favorites } favorite(s) from Arc
+arc-import-failed = Failed to import from Arc
+arc-import-no-data = No Arc data found

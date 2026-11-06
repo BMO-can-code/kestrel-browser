@@ -15,7 +15,10 @@
         content/browser/zen-components/ZenSidebarNotification.mjs               (../../zen/common/modules/ZenSidebarNotification.mjs)
         content/browser/zen-components/ZenMenubar.mjs                           (../../zen/common/modules/ZenMenubar.mjs)
         content/browser/zen-components/ZenTabNotes.mjs                          (../../zen/common/modules/ZenTabNotes.mjs)
+        content/browser/zen-components/ZenTabArchive.mjs                        (../../zen/archive/ZenTabArchive.mjs)
         content/browser/zen-components/ZenEasels.mjs                            (../../zen/easels/ZenEasels.mjs)
+        content/browser/zen-components/ZenVideoPreview.mjs                      (../../zen/video-preview/ZenVideoPreview.mjs)
+        content/browser/zen-components/ZenArcImport.mjs                         (../../zen/migration/ArcImportCommand.mjs)
 
         content/browser/zen-components/ZenEmojisData.min.mjs                    (../../zen/common/emojis/ZenEmojisData.min.mjs)
         content/browser/zen-components/ZenEmojiPicker.mjs                       (../../zen/common/emojis/ZenEmojiPicker.mjs)
@@ -32,6 +35,7 @@
         content/browser/zen-styles/zen-omnibox.css                              (../../zen/common/styles/zen-omnibox.css)
         content/browser/zen-styles/zen-popup.css                                (../../zen/common/styles/zen-popup.css)
         content/browser/zen-styles/zen-command-bar.css                          (../../zen/common/styles/zen-command-bar.css)
+        content/browser/zen-styles/zen-video-preview.css                        (../../zen/video-preview/ZenVideoPreview.css)
         content/browser/zen-styles/zen-branding.css                             (../../zen/common/styles/zen-branding.css)
         content/browser/zen-styles/zen-sidebar-notification.css                 (../../zen/common/styles/zen-sidebar-notification.css)
 *       content/browser/zen-styles/zen-backdrop-filters.svg                     (../../zen/common/styles/zen-backdrop-filters.svg)
