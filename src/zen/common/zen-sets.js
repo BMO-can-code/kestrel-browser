@@ -69,6 +69,9 @@
     cmd_zenSplitViewContextMenu: () => gZenViewSplitter.contextSplitTabs(),
     cmd_zenCtxShareSplitView: () => gZenViewSplitter.contextShareSplitView(),
     cmd_zenSplitViewLinkInNewTab: () => gZenViewSplitter.splitLinkInNewTab(),
+    cmd_zenSplitViewCycleFocus: () => gZenViewSplitter.cycleFocus(),
+    cmd_zenSplitViewClosePane: () => gZenViewSplitter.closePane(),
+    cmd_zenLittleArc: () => ZenLittleArc.open(),
     cmd_zenNewEmptySplit: () => {
       setTimeout(() => {
         gZenViewSplitter.createEmptySplit();

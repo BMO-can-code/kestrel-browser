@@ -57,3 +57,21 @@ zen-action-clear-archive = Clear Archive
 # Space export/import
 zen-action-export-spaces = Export Spaces
 zen-action-import-spaces = Import Spaces
+
+# Split view
+zen-action-cycle-focus = Cycle Split Focus
+zen-action-close-pane = Close Split Pane
+
+# Little Arc
+littleArc.title = Little Arc
+littleArc.urlPlaceholder = Type a URL or search
+littleArc.openInSpace = Open in Space
+littleArc.openInSpaceTooltip = Open current page in a space
+littleArc.splitWithCurrent = Split with Current
+littleArc.splitWithCurrentTooltip = Open current page in split view
+littleArc.archiveTab = Archive Tab
+littleArc.archiveTabTooltip = Archive current tab
+littleArc.pinTab = Pin Tab
+littleArc.pinTabTooltip = Pin or unpin current tab
+littleArc.closeWindow = Close Window
+littleArc.closeWindowTooltip = Close Little Arc window

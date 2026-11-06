@@ -16,6 +16,7 @@ DIRS += [
     "glance",
     "kbs",
     "library",
+    "little-arc",
     "live-folders",
     "media",
     "migration",

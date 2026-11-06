@@ -30,11 +30,39 @@
     "resource:///modules/zen/share/ZenShareManager.mjs",
     "chrome://browser/content/zen-components/ZenCommandBar.mjs",
     "chrome://browser/content/zen-components/ZenTabArchive.mjs",
+    "chrome://browser/content/zen-components/ZenLittleArc.mjs",
   ];
 
   for (let script of scripts) {
     ChromeUtils.importESModule(script, { global: "current" });
   }
+
+  // Sync native hover preview pref with Zen's pref
+  const HZEN_PREFS = "zen.tabs.hover-previews";
+  const HZEN_DELAY = "zen.tabs.hover-preview-delay";
+  const NATIVE_PREFS = "browser.tabs.hoverPreview.enabled";
+  const NATIVE_DELAY = "browser.tabs.hoverPreview.delay";
+  function _syncHoverPreview() {
+    try {
+      const enabled = Services.prefs.getBoolPref(HZEN_PREFS, false);
+      Services.prefs.setBoolPref(NATIVE_PREFS, enabled);
+    } catch (e) {
+      // ignore
+    }
+    try {
+      const delay = Services.prefs.getIntPref(HZEN_DELAY, 300);
+      Services.prefs.setIntPref(NATIVE_DELAY, delay);
+    } catch (e) {
+      // ignore
+    }
+  }
+  _syncHoverPreview();
+  Services.prefs.addObserver(HZEN_PREFS, {
+    observe() { _syncHoverPreview(); }
+  });
+  Services.prefs.addObserver(HZEN_DELAY, {
+    observe() { _syncHoverPreview(); }
+  });
 
   let customZenElements = [
     ["zen-folder", "chrome://browser/content/zen-components/ZenFolder.mjs"],

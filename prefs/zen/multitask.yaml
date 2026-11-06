@@ -1,0 +1,37 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+- name: zen.splitView.cycle-focus
+  value: true
+  type: bool
+
+- name: zen.splitView.close-pane
+  value: true
+  type: bool
+
+- name: zen.splitView.layout-presets
+  value: true
+  type: bool
+
+- name: zen.windows.little-arc
+  value: false
+  type: bool
+
+- name: zen.windows.little-arc.hotkey
+  value: "Accel+Shift+Space"
+
+- name: zen.glance.enter-opens-in-place
+  value: true
+  type: bool
+
+- name: zen.glance.shift-enter-opens-in-split
+  value: true
+  type: bool
+
+- name: zen.tabs.hover-previews
+  value: false
+  type: bool
+
+- name: zen.tabs.hover-preview-delay
+  value: 300

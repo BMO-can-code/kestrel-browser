@@ -61,16 +61,16 @@ Local download blocked by slow network; CI verified app launches via `--version`
 |---|---|---|---|---|---|---|---|
 | After M1 file additions | ~0.3 MB | absent | absent | — | 92 MB | 31 GB | measured |
 
-## M2 local measurements (no build)
+## M3 local measurements (no build)
 
 | Step | Repo (`.`) | `engine/` | `~/.mozbuild` | `objdir/` | node_modules | Free disk | Source |
 |---|---|---|---|---|---|---|---|
-| After M2 file additions | ~0.1 MB | absent | absent | — | 92 MB | 31 GB | measured |
+| After M3 file additions | ~0.2 MB | absent | absent | — | 92 MB | 33 GB | measured |
 
 Notes:
 - No local build performed under S1; all changes are UI/pref/CSS/JS module only.
 - `engine/`, `~/.mozbuild`, objdir remain absent.
-- Disk headroom ample (31 GB free vs 10 GB cap).
+- Disk headroom ample (33 GB free vs 10 GB cap).
 
 Rules applied:
 - `SCCACHE_CACHE_SIZE=1G`, `SCCACHE_DIR=$PWD/.sccache` (deleted before packaging / when low on space).

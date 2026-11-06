@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+<?csp default-src chrome: resource:; object-src 'none'; ?>
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        id="zen-little-arc-window"
+        windowtype="Zen:LittleArc"
+        data-l10n-id="littleArc.title"
+        width="600"
+        height="400"
+        minwidth="400"
+        minheight="300"
+        chrome="chrome"
+        sizemode="normal">
+
+  <linkset>
+    <html:link rel="stylesheet" href="chrome://global/skin/global.css"/>
+    <html:link rel="stylesheet" href="chrome://browser/content/zen-styles/zen-toolbar.css"/>
+    <html:link rel="localization" href="browser/zen-command-palette.ftl"/>
+  </linkset>
+
+  <script type="text/javascript"
+          src="chrome://browser/content/zen-components/ZenLittleArc.mjs"/>
+
+  <vbox id="zen-little-arc-root" flex="1">
+
+    <!-- Minimal toolbar: URL bar + action buttons -->
+    <hbox id="zen-little-arc-toolbar" align="center" pack="start">
+      <textbox id="zen-little-arc-urlbar"
+               type="urlbar"
+               flex="1"
+               data-l10n-id="littleArc.urlPlaceholder"
+               autocomplete="true"/>
+      <toolbarbutton id="zen-little-arc-btn-space"
+                     data-l10n-id="littleArc.openInSpace"
+                     class="toolbarbutton-1"/>
+      <toolbarbutton id="zen-little-arc-btn-split"
+                     data-l10n-id="littleArc.splitWithCurrent"
+                     class="toolbarbutton-1"/>
+      <toolbarbutton id="zen-little-arc-btn-archive"
+                     data-l10n-id="littleArc.archiveTab"
+                     class="toolbarbutton-1"/>
+      <toolbarbutton id="zen-little-arc-btn-pin"
+                     data-l10n-id="littleArc.pinTab"
+                     class="toolbarbutton-1"/>
+      <toolbarbutton id="zen-little-arc-btn-close"
+                     data-l10n-id="littleArc.closeWindow"
+                     class="toolbarbutton-1"/>
+    </hbox>
+
+    <!-- Content area: browser -->
+    <tabbrowser id="zen-little-arc-tabbrowser"
+                flex="1"
+                contextualidentity="true"/>
+
+  </vbox>
+
+</window>

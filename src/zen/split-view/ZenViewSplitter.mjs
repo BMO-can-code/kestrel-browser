@@ -2098,6 +2098,49 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
   }
 
   /**
+   * Cycles focus between tabs/panes within the current split view group.
+   * Wraps around when reaching the end.
+   */
+  cycleFocus() {
+    if (!this.splitViewActive) {
+      return;
+    }
+    const group = this._data[this.currentView];
+    if (!group || group.tabs.length < 2) {
+      return;
+    }
+    const currentIndex = group.tabs.indexOf(gBrowser.selectedTab);
+    let nextIndex = currentIndex + 1;
+    if (nextIndex >= group.tabs.length) {
+      nextIndex = 0;
+    }
+    const nextTab = group.tabs[nextIndex];
+    if (nextTab) {
+      gBrowser.selectedTab = nextTab;
+    }
+  }
+
+  /**
+   * Closes the currently focused pane within the current split view group.
+   * If only two panes remain, unsplits back to a single tab.
+   */
+  closePane() {
+    if (!this.splitViewActive) {
+      return;
+    }
+    const group = this._data[this.currentView];
+    if (!group || group.tabs.length < 2) {
+      return;
+    }
+    const tab = gBrowser.selectedTab;
+    if (!group.tabs.includes(tab)) {
+      return;
+    }
+    const groupIndex = this.currentView;
+    this.removeTabFromGroup(tab, groupIndex, { forUnsplit: true });
+  }
+
+  /**
    * @description removes the tab from the split
    * @param {Event} event - The click event
    * @param {Element} container - The container element

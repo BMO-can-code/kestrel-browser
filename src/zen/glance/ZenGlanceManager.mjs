@@ -61,6 +61,9 @@ class nsZenGlanceManager extends nsZenDOMOperatedFeature {
     document
       .getElementById("tabbrowser-tabpanels")
       .addEventListener("click", this.onOverlayClick.bind(this));
+
+    // Glance key handling: Enter/Shift+Enter/Esc
+    window.addEventListener("keydown", this.#onGlanceKeyDown.bind(this), true);
   }
 
   #detached = null;
@@ -254,6 +257,83 @@ class nsZenGlanceManager extends nsZenDOMOperatedFeature {
     const handler = commandHandlers[command.id];
     if (handler) {
       handler();
+    }
+  }
+
+  /**
+   * Handle global key events for glance: Enter/Shift+Enter/Esc.
+   * - Enter: opens glance in place (full tab)
+   * - Shift+Enter: opens glance in split view
+   * - Esc: closes glance and restores focus to the previous element
+   *
+   * @param {KeyboardEvent} event - The keydown event
+   */
+  #onGlanceKeyDown(event) {
+    if (!this.#currentGlanceID) {
+      return;
+    }
+    const enabledEnter =
+      Services.prefs.getBoolPref("zen.glance.enter-opens-in-place", true);
+    const enabledShiftEnter =
+      Services.prefs.getBoolPref("zen.glance.shift-enter-opens-in-split", true);
+
+    if (event.key === "Enter" && !event.shiftKey && enabledEnter) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.#openGlanceInPlace();
+      return;
+    }
+    if (event.key === "Enter" && event.shiftKey && enabledShiftEnter) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.splitGlance();
+      return;
+    }
+    if (event.key === "Escape") {
+      event.preventDefault();
+      event.stopPropagation();
+      this.#closeGlanceRestoreFocus();
+      return;
+    }
+  }
+
+  /**
+   * Open the current glance in place as a full tab.
+   */
+  #openGlanceInPlace() {
+    const glance = this.#glances.get(this.#currentGlanceID);
+    if (!glance) {
+      return;
+    }
+    const url = glance.browser.currentURI.spec;
+    const userContextId = glance.browser.getAttribute("usercontextid") || 0;
+    const parentTab = glance.parentTab;
+
+    this.closeGlance({ onTabClose: false });
+
+    const tab = gBrowser.addTrustedTab(url, {
+      triggeringPrincipal: glance.browser.triggeringPrincipal,
+      userContextId: parseInt(userContextId, 10) || undefined,
+    });
+    gBrowser.selectedTab = tab;
+
+    // Restore focus to the parent tab area
+    if (parentTab) {
+      gBrowser.selectedTab = parentTab;
+    }
+  }
+
+  /**
+   * Close the glance and restore focus to the previously focused element.
+   */
+  #closeGlanceRestoreFocus() {
+    // Remember the currently focused element before closing
+    const focusedElement = document.activeElement;
+    this.closeGlance({ onTabClose: false });
+
+    // Restore focus if the element still exists
+    if (focusedElement && focusedElement.isConnected) {
+      focusedElement.focus();
     }
   }
 
