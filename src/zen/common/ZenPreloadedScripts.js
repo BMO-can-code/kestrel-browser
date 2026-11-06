@@ -29,6 +29,7 @@
     "chrome://browser/content/zen-components/ZenDownloadAnimation.mjs",
     "resource:///modules/zen/share/ZenShareManager.mjs",
     "chrome://browser/content/zen-components/ZenCommandBar.mjs",
+    "chrome://browser/content/zen-components/ZenTabArchive.mjs",
   ];
 
   for (let script of scripts) {

@@ -337,6 +337,98 @@ const globalActionsTemplate = [
       return isNotEmptyTab(window);
     },
   },
+  {
+    l10nId: "zen-action-archive-tab",
+    command: window => {
+      const { ZenTabArchive } = ChromeUtils.importESModule(
+        "chrome://browser/content/zen-components/ZenTabArchive.mjs",
+        { global: "current" }
+      );
+      return ZenTabArchive.archiveTab(window.gBrowser.selectedTab);
+    },
+    isAvailable: window => {
+      return (
+        Services.prefs.getBoolPref("zen.tabs.archive.enabled", false) &&
+        isNotEmptyTab(window) &&
+        !window.gBrowser.selectedTab.hasAttribute("zen-empty-tab")
+      );
+    },
+    icon: "chrome://browser/skin/zen-icons/archive.svg",
+  },
+  {
+    l10nId: "zen-action-undo-archive",
+    command: window => {
+      const { ZenTabArchive } = ChromeUtils.importESModule(
+        "chrome://browser/content/zen-components/ZenTabArchive.mjs",
+        { global: "current" }
+      );
+      return ZenTabArchive.undoLastArchive();
+    },
+    isAvailable: window => {
+      return Services.prefs.getBoolPref("zen.tabs.archive.enabled", false);
+    },
+    icon: "chrome://browser/skin/zen-icons/archive.svg",
+  },
+  {
+    l10nId: "zen-action-export-spaces",
+    command: window => {
+      const { gZenWorkspaces } = window;
+      if (!gZenWorkspaces) {
+        return null;
+      }
+      const data = gZenWorkspaces.exportSpaces();
+      const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = window.document.createElementNS(
+        "http://www.w3.org/1999/xhtml",
+        "a"
+      );
+      a.href = url;
+      a.download = `kestrel-spaces-${data.exportedAt}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      return data;
+    },
+    isAvailable: window => {
+      return !!window.gZenWorkspaces;
+    },
+    icon: "chrome://browser/skin/zen-icons/archive.svg",
+  },
+  {
+    l10nId: "zen-action-import-spaces",
+    command: window => {
+      const input = window.document.createElementNS(
+        "http://www.w3.org/1999/xhtml",
+        "input"
+      );
+      input.type = "file";
+      input.accept = ".json";
+      input.onchange = async event => {
+        const file = event.target.files?.[0];
+        if (!file) {
+          return;
+        }
+        const text = await file.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          console.error("[zen-action-import-spaces] invalid JSON", e);
+          return;
+        }
+        const { gZenWorkspaces } = window;
+        const result = gZenWorkspaces.importSpaces(data);
+        console.log("[zen-action-import-spaces] result", result);
+      };
+      input.click();
+    },
+    isAvailable: window => {
+      return !!window.gZenWorkspaces;
+    },
+    icon: "chrome://browser/skin/zen-icons/archive.svg",
+  },
 ];
 
 export function formatValueSync(l10nId) {

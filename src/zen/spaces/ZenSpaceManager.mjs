@@ -806,6 +806,53 @@ class nsZenWorkspaces {
     }
   }
 
+  /**
+   * Get the search engine name for a workspace.
+   * Returns null if per-space search engine is disabled or not set.
+   *
+   * @param {string|object} workspaceIdOrWorkspace - Workspace uuid or object
+   * @returns {string|null} Search engine name or null
+   */
+  getSearchEngineForWorkspace(workspaceIdOrWorkspace) {
+    try {
+      const enabled = Services.prefs.getBoolPref(
+        "zen.spaces.per-engine-search",
+        false
+      );
+      if (!enabled) {
+        return null;
+      }
+      const workspace =
+        typeof workspaceIdOrWorkspace === "string"
+          ? this.getWorkspace(workspaceIdOrWorkspace)
+          : workspaceIdOrWorkspace;
+      return workspace?.searchEngine ?? null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /**
+   * Set the search engine name for a workspace.
+   *
+   * @param {string} workspaceId - Workspace uuid
+   * @param {string|null} engineName - Search engine name or null to clear
+   */
+  setSearchEngineForWorkspace(workspaceId, engineName) {
+    try {
+      const workspace = this.getWorkspace(workspaceId);
+      if (!workspace) {
+        return false;
+      }
+      workspace.searchEngine = engineName || null;
+      this.saveWorkspace(workspace);
+      return true;
+    } catch (e) {
+      console.error("[nsZenWorkspaces] setSearchEngineForWorkspace failed", e);
+      return false;
+    }
+  }
+
   getWorkspaces(lieToMe = false) {
     if (lieToMe) {
       const { ZenSessionStore } = ChromeUtils.importESModule(
@@ -1472,6 +1519,98 @@ class nsZenWorkspaces {
     }
 
     this.#propagateWorkspaceData();
+  }
+
+  /**
+   * Export all spaces to a JSON-serializable object.
+   * Includes spaces, their themes, containers, and essential/pinned tab state.
+   *
+   * @returns {object} Export data with spaces array and metadata
+   */
+  exportSpaces() {
+    const workspaces = this.getWorkspaces();
+    const exportedSpaces = workspaces.map(workspace => ({
+      uuid: workspace.uuid,
+      name: workspace.name,
+      icon: workspace.icon || null,
+      theme: workspace.theme || null,
+      containerTabId: workspace.containerTabId || 0,
+      searchEngine: workspace.searchEngine || null,
+    }));
+
+    return {
+      version: 1,
+      exportedAt: Date.now(),
+      spaces: exportedSpaces,
+    };
+  }
+
+  /**
+   * Import spaces from a JSON object produced by exportSpaces().
+   * Validates the import data and merges spaces into the current set.
+   *
+   * @param {object} data - Export data from exportSpaces()
+   * @param {object} options - { replaceAll: boolean }
+   * @returns {object} { imported: number, skipped: number, errors: Array<string> }
+   */
+  importSpaces(data, { replaceAll = false } = {}) {
+    const errors = [];
+    let imported = 0;
+    let skipped = 0;
+
+    if (!data || !Array.isArray(data.spaces)) {
+      errors.push("Invalid export data: missing spaces array");
+      return { imported: 0, skipped: 0, errors };
+    }
+
+    if (data.version !== 1) {
+      errors.push(`Unsupported export version: ${data.version}`);
+      return { imported: 0, skipped: 0, errors };
+    }
+
+    const existingUuids = new Set(
+      this.getWorkspaces().map(w => w.uuid)
+    );
+
+    if (replaceAll) {
+      this._workspaceCache = [];
+      this.#propagateWorkspaceData();
+    }
+
+    for (const space of data.spaces) {
+      try {
+        if (!space.uuid || !space.name) {
+          skipped++;
+          errors.push(`Skipping space with missing uuid or name`);
+          continue;
+        }
+
+        if (existingUuids.has(space.uuid) && !replaceAll) {
+          skipped++;
+          errors.push(`Skipping duplicate space: ${space.name}`);
+          continue;
+        }
+
+        const workspaceData = {
+          uuid: space.uuid,
+          name: space.name,
+          icon: space.icon || null,
+          theme: space.theme || null,
+          containerTabId: space.containerTabId || 0,
+          searchEngine: space.searchEngine || null,
+        };
+
+        this.saveWorkspace(workspaceData);
+        existingUuids.add(space.uuid);
+        imported++;
+      } catch (e) {
+        skipped++;
+        errors.push(`Failed to import space ${space.name || "unknown"}: ${e.message}`);
+      }
+    }
+
+    console.log("[nsZenWorkspaces] importSpaces", { imported, skipped, errors: errors.length });
+    return { imported, skipped, errors };
   }
 
   removeWorkspace(windowID) {
@@ -2863,6 +3002,7 @@ class nsZenWorkspaces {
       name,
       theme: nsZenThemePicker.getTheme([]),
       containerTabId,
+      searchEngine: null,
     };
     return workspace;
   }

@@ -1,0 +1,29 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+- name: zen.tabs.archive.enabled
+  value: false
+  type: bool
+
+- name: zen.tabs.archive.auto
+  value: false
+  type: bool
+
+- name: zen.tabs.archive.idle-hours
+  value: 12
+
+- name: zen.tabs.archive.max-items
+  value: 500
+
+- name: zen.spaces.per-engine-search
+  value: false
+  type: bool
+
+- name: zen.spaces.export
+  value: false
+  type: bool
+
+- name: zen.commandbar.archive.enabled
+  value: false
+  type: bool

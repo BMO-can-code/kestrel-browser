@@ -47,3 +47,13 @@ zen-action-open = Open
 # Command bar
 zen-commandbar-placeholder = Search, tabs, spaces, actions
 zen-commandbar-title = Command bar
+
+# Tab archive
+zen-action-archive-tab = Archive Tab
+zen-action-restore-archived-tab = Restore Archived Tab
+zen-action-undo-archive = Undo Archive
+zen-action-clear-archive = Clear Archive
+
+# Space export/import
+zen-action-export-spaces = Export Spaces
+zen-action-import-spaces = Import Spaces
