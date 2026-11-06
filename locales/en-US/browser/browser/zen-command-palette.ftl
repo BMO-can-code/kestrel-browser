@@ -43,3 +43,7 @@ zen-action-print = Print
 zen-action-focus-on = Focus on
 zen-action-extension = Extension
 zen-action-open = Open
+
+# Command bar
+zen-commandbar-placeholder = Search, tabs, spaces, actions
+zen-commandbar-title = Command bar

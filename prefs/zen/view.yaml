@@ -72,3 +72,11 @@
 
 - name: zen.view.enable-loading-indicator
   value: true
+
+- name: zen.view.sidebar-essentials.enabled
+  value: true
+  type: bool
+
+- name: zen.view.sidebar-collapse-animate
+  value: true
+  type: bool

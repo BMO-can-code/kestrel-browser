@@ -8,6 +8,7 @@ EXTRA_PP_COMPONENTS += [
 
 DIRS += [
     "boosts",
+    "command-bar",
     "common",
     "compact-mode",
     "drag-and-drop",

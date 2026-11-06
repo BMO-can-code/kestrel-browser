@@ -1,0 +1,70 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+/* ==========================================================================
+   Command bar (Cmd/Ctrl+K) — pref-gated behind zen.commandbar.enabled
+   ========================================================================== */
+
+#zen-command-bar-panel {
+  /* Backdrop acrylic/blur applied via theme; panel itself is opaque */
+  background: var(--zen-main-browser-background-toolbar);
+  border: 1px solid var(--zen-colors-border);
+  box-shadow: var(--zen-big-shadow);
+  color: var(--zen-colors-text-primary);
+  font-family: var(--zen-ui-font);
+  font-size: 14px;
+}
+
+#zen-command-bar-panel textbox {
+  border: 1px solid var(--zen-input-border-color);
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: var(--zen-colors-input-bg);
+  color: var(--zen-colors-text-primary);
+  font-size: 14px;
+  outline: none;
+}
+
+#zen-command-bar-panel textbox:focus {
+  border-color: var(--zen-accent-button-background);
+}
+
+#zen-command-bar-panel vbox {
+  padding: 0;
+}
+
+#zen-command-bar-panel hbox {
+  padding: 10px 12px;
+  border-radius: 8px;
+  gap: 10px;
+  align-items: center;
+}
+
+#zen-command-bar-panel hbox:hover {
+  background: var(--zen-colors-hover-bg);
+}
+
+#zen-command-bar-panel image {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+#zen-command-bar-panel label {
+  font-size: 14px;
+  color: var(--zen-colors-text-primary);
+}
+
+#zen-command-bar-panel label[style*="opacity"] {
+  font-size: 12px;
+}
+
+/* Reduce motion for command bar animations */
+@media (prefers-reduced-motion: reduce) {
+  #zen-command-bar-panel {
+    transition: none !important;
+  }
+}

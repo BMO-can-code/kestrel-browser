@@ -27,11 +27,44 @@ Notes:
 - No objdir exists locally under S1.
 - Repo total (clone + node_modules): ~193 MB.
 
-## Per-build entries (to be filled by CI / authorized local builds)
+## Per-build entries (CI)
 
 | Build | Strategy | Repo | engine | ~/.mozbuild | objdir | Free after | Artifact kept | Status |
 |---|---|---|---|---|---|---|---|---|
-| — | — | — | — | — | — | — | — | pending first CI run |
+| #41757583035 | S1 macOS arm64 | — | — | — | — | — | — | FAILED: configs/common/mozconfig ENOENT |
+| #42001053660 | S1 macOS arm64 | — | — | — | — | — | — | FAILED: --disable-debuginfo invalid option |
+| #42004309810 | S1 macOS arm64 | — | — | — | — | — | — | FAILED: --disable-elf-tidy invalid option |
+| #42007407523 | S1 macOS arm64 | — | — | — | — | — | — | FAILED: DMG detached before ditto copy |
+| #42055942774 | S1 macOS arm64 | — | — | — | — | — | — | FAILED: sccache 504 + sharp install timeout |
+| #42056980166 | S1 macOS arm64 | — | — | — | — | — | — | FAILED: sharp native build timeout |
+| #42057952917 | S1 macOS arm64 | — | — | — | — | — | — | FAILED: import patches (sharp missing) |
+| #42062037848 | S1 macOS arm64 | — | — | — | — | — | — | CANCELLED (stuck in Build) |
+| #42077709377 | S1 macOS arm64 | — | — | — | — | — | — | FAILED: DMG detached before ditto copy |
+| #42125270234 | S1 macOS arm64 | — | — | — | — | — | zen-stock-dev-arm64 (131 MB) | **SUCCESS** |
+
+CI fix summary:
+1. Created `configs/common/mozconfig` + `configs/macos/mozconfig` (were absent, caused ENOENT)
+2. Fixed `.gitignore`: bare `mozconfig` → `/mozconfig` + `!configs/**/mozconfig` negation
+3. Removed invalid `--disable-debuginfo` and `--disable-elf-tidy` from mozconfig
+4. Changed `MOZ_OBJDIR` from `$topsrcdir/engine/objdir` to `$topsrcdir/obj-kestrel` (matches CI `find obj-*/dist`)
+5. Made sccache setup `continue-on-error: true` (transient 504)
+6. Restored npm install scripts (surfer `import` needs sharp native binding)
+7. Rewrote Package app bundle step: mount DMG → extract .app → verify → zip → detach DMG *after* copy
+
+Artifact: `zen-stock-dev-arm64` (131 MB zip) from run #42125270234.
+Download URL: https://api.github.com/repos/BMO-can-code/kestrel-browser/actions/artifacts/13467629867/zip
+Local download blocked by slow network; CI verified app launches via `--version` check.
+
+## M1 local measurements (no build)
+
+| Step | Repo (`.`) | `engine/` | `~/.mozbuild` | `objdir/` | node_modules | Free disk | Source |
+|---|---|---|---|---|---|---|---|
+| After M1 file additions | ~0.3 MB | absent | absent | — | 92 MB | 31 GB | measured |
+
+Notes:
+- No local build performed under S1; all changes are UI/pref/CSS only.
+- `engine/`, `~/.mozbuild`, objdir remain absent.
+- Disk headroom ample (31 GB free vs 10 GB cap).
 
 Rules applied:
 - `SCCACHE_CACHE_SIZE=1G`, `SCCACHE_DIR=$PWD/.sccache` (deleted before packaging / when low on space).

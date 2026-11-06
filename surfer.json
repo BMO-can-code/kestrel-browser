@@ -1,6 +1,6 @@
 {
-  "name": "Zen Browser",
-  "vendor": "Zen OSS Team",
+  "name": "Kestrel Browser",
+  "vendor": "Kestrel OSS Team",
   "appId": "zen",
   "binaryName": "zen",
   "version": {
@@ -16,13 +16,13 @@
   "brands": {
     "release": {
       "backgroundColor": "#282A33",
-      "brandShorterName": "Zen",
-      "brandShortName": "Zen",
-      "brandFullName": "Zen Browser",
+      "brandShorterName": "Kestrel",
+      "brandShortName": "Kestrel",
+      "brandFullName": "Kestrel Browser",
       "release": {
         "displayVersion": "1.24b",
         "github": {
-          "repo": "zen-browser/desktop"
+          "repo": "BMO-can-code/kestrel-browser"
         },
         "archives": {
           "windows": "windows.mar",
@@ -36,13 +36,13 @@
     },
     "twilight": {
       "backgroundColor": "#282A33",
-      "brandShorterName": "Zen",
-      "brandShortName": "Twilight",
-      "brandFullName": "Zen Twilight",
+      "brandShorterName": "Kestrel",
+      "brandShortName": "Kestrel Twilight",
+      "brandFullName": "Kestrel Twilight",
       "release": {
         "displayVersion": "1.25t",
         "github": {
-          "repo": "zen-browser/desktop"
+          "repo": "BMO-can-code/kestrel-browser"
         }
       }
     }
@@ -53,5 +53,5 @@
     ],
     "licenseType": "MPL-2.0"
   },
-  "updateHostname": "updates.zen-browser.app"
+  "updateHostname": ""
 }

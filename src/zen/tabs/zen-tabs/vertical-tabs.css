@@ -266,6 +266,20 @@ zen-library {
   border: none;
   order: 0 !important;
   display: flex;
+
+  /* Sidebar collapse/expand animates opacity/transform, never width,
+     so the compositor can drive it off the main thread. */
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease;
+}
+
+/* Reduce motion for sidebar collapse */
+@media (prefers-reduced-motion: reduce) {
+  #navigator-toolbox,
+  .zen-library-space-body {
+    transition: none !important;
+  }
 }
 
 /* Hide default titlebar spacers */
