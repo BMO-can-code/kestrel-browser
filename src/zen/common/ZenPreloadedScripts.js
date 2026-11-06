@@ -82,6 +82,24 @@
     observe() { _syncTabNotes(); }
   });
 
+  // Sync visible-focus pref to document attribute for CSS focus indicators
+  const VIS_FOCUS_ZEN = "zen.a11y.visible-focus";
+  function _syncVisibleFocus() {
+    try {
+      const enabled = Services.prefs.getBoolPref(VIS_FOCUS_ZEN, true);
+      document.documentElement.setAttribute(
+        "zen-a11y-visible-focus",
+        enabled ? "true" : "false"
+      );
+    } catch (e) {
+      // ignore
+    }
+  }
+  _syncVisibleFocus();
+  Services.prefs.addObserver(VIS_FOCUS_ZEN, {
+    observe() { _syncVisibleFocus(); }
+  });
+
   let customZenElements = [
     ["zen-folder", "chrome://browser/content/zen-components/ZenFolder.mjs"],
     ["zen-workspace-creation", "resource:///modules/zen/ZenSpaceCreation.mjs"],

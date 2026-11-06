@@ -121,10 +121,10 @@ export class nsZenEasel extends nsZenDOMOperatedFeature {
     const renderer = this._renderMarkdown(this._content);
     this.innerHTML = `
       <div class="zen-easel-header">
-        <h3 class="zen-easel-title" contenteditable="true">${this._escapeHtml(this._title)}</h3>
-        <button class="zen-easel-export" data-l10n-id="easel-export">Export Markdown</button>
+        <h3 class="zen-easel-title" role="textbox" aria-label="Easel title" aria-multiline="false" contenteditable="true">${this._escapeHtml(this._title)}</h3>
+        <button class="zen-easel-export" data-l10n-id="easel-export" aria-label="Export easel to Markdown">Export Markdown</button>
       </div>
-      <div class="zen-easel-canvas" contenteditable="true">${renderer}</div>
+      <div class="zen-easel-canvas" role="region" aria-label="Easel content" aria-multiline="true" contenteditable="true">${renderer}</div>
     `;
     this._attachEditListeners();
   }

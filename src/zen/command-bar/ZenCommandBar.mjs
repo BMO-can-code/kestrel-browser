@@ -95,6 +95,9 @@ export class nsZenCommandBar {
     panel.setAttribute("popin", "true");
     panel.setAttribute("level", "topmost");
     panel.setAttribute("type", "arrow");
+    panel.setAttribute("role", "dialog");
+    panel.setAttribute("aria-modal", "true");
+    panel.setAttribute("aria-label", this._l10n("title"));
     panel.style.opacity = "0";
     panel.style.transform = "scale(0.95)";
     panel.style.transition = `opacity ${ZenDesignTokensInstance.commandBarOpenDurationMs}ms ${ZenDesignTokensInstance.sidebarCollapseEasing},

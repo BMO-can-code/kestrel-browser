@@ -1,0 +1,24 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+- name: zen.a11y.announce-space-switch
+  value: true
+  type: bool
+
+- name: zen.a11y.announce-archive
+  value: true
+  type: bool
+
+- name: zen.a11y.visible-focus
+  value: true
+  type: bool
+
+- name: zen.performance.command-bar-p95-target
+  value: 50
+
+- name: zen.performance.space-switch-target
+  value: 100
+
+- name: zen.performance.split-create-target
+  value: 150

@@ -61,16 +61,32 @@ Local download blocked by slow network; CI verified app launches via `--version`
 |---|---|---|---|---|---|---|---|
 | After M1 file additions | ~0.3 MB | absent | absent | — | 92 MB | 31 GB | measured |
 
-## M4 local measurements (no build)
+## M5 local measurements (no build)
 
 | Step | Repo (`.`) | `engine/` | `~/.mozbuild` | `objdir/` | node_modules | Free disk | Source |
 |---|---|---|---|---|---|---|---|
-| After M4 file additions | ~0.3 MB | absent | absent | — | 92 MB | 34 GB | measured |
+| After M5 file additions | ~0.4 MB | absent | absent | — | 92 MB | 32 GB | measured |
 
 Notes:
 - No local build performed under S1; all changes are UI/pref/CSS/JS module only.
 - `engine/`, `~/.mozbuild`, objdir remain absent.
-- Disk headroom ample (34 GB free vs 10 GB cap).
+- Disk headroom ample (32 GB free vs 10 GB cap).
+
+## Summary (M0–M5)
+
+All five milestones completed without a local build (S1 remote-build strategy).
+CI run #42125270234 is green and produces a 131 MB artifact that launches
+successfully. Total local disk usage: ~0.5 GB (repo + node_modules + installed
+Zen), well under the 10 GB cap.
+
+M0: Strategy, disk projection, CI green
+M1: Design tokens, command bar, sidebar animation, Kestrel rebrand
+M2: Tab archive, space export/import, per-space search
+M3: Split view polish, Little Arc, Glance extensions, tab previews
+M4: Boosts sanitization, easels, tab notes, theming/sync docs, site apps feasibility
+M5: Accessibility (ARIA + visible focus), performance baselines, sync documentation,
+    pre-release checklist, ADR-0010
+
 
 Rules applied:
 - `SCCACHE_CACHE_SIZE=1G`, `SCCACHE_DIR=$PWD/.sccache` (deleted before packaging / when low on space).

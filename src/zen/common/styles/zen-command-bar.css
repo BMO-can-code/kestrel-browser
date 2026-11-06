@@ -32,6 +32,14 @@
   border-color: var(--zen-accent-button-background);
 }
 
+#zen-command-bar-panel hbox:focus,
+#zen-command-bar-panel button:focus,
+#zen-command-bar-panel [role="textbox"]:focus {
+  outline: 2px solid var(--zen-accent-button-background);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 #zen-command-bar-panel vbox {
   padding: 0;
 }
