@@ -75,3 +75,12 @@ littleArc.pinTab = Pin Tab
 littleArc.pinTabTooltip = Pin or unpin current tab
 littleArc.closeWindow = Close Window
 littleArc.closeWindowTooltip = Close Little Arc window
+
+# Easels
+easel-new = New Easel
+easel-export = Export Markdown
+easel-title = Easel
+
+# Tab notes
+zen-action-tab-notes = Tab Notes
+zen-action-toggle-tab-notes = Toggle Tab Notes

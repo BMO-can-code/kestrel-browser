@@ -13,6 +13,7 @@ DIRS += [
     "common",
     "compact-mode",
     "drag-and-drop",
+    "easels",
     "glance",
     "kbs",
     "library",

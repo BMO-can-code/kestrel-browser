@@ -429,6 +429,20 @@ const globalActionsTemplate = [
     },
     icon: "chrome://browser/skin/zen-icons/archive.svg",
   },
+  {
+    l10nId: "zen-action-tab-notes",
+    command: window => {
+      const { ZenTabNotes } = ChromeUtils.importESModule(
+        "chrome://browser/content/zen-components/ZenTabNotes.mjs",
+        { global: "current" }
+      );
+      ZenTabNotes.toggleSidebar();
+    },
+    isAvailable: window => {
+      return Services.prefs.getBoolPref("zen.notes.tab", false);
+    },
+    icon: "chrome://browser/skin/zen-icons/note-indicator.svg",
+  },
 ];
 
 export function formatValueSync(l10nId) {

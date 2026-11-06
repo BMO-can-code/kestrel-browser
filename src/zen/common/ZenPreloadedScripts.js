@@ -31,6 +31,8 @@
     "chrome://browser/content/zen-components/ZenCommandBar.mjs",
     "chrome://browser/content/zen-components/ZenTabArchive.mjs",
     "chrome://browser/content/zen-components/ZenLittleArc.mjs",
+    "chrome://browser/content/zen-components/ZenEasels.mjs",
+    "chrome://browser/content/zen-components/ZenTabNotes.mjs",
   ];
 
   for (let script of scripts) {
@@ -62,6 +64,22 @@
   });
   Services.prefs.addObserver(HZEN_DELAY, {
     observe() { _syncHoverPreview(); }
+  });
+
+  // Sync native tab notes pref with Zen's pref
+  const NOTES_ZEN = "zen.notes.tab";
+  const NOTES_NATIVE = "browser.tabs.notes.enabled";
+  function _syncTabNotes() {
+    try {
+      const enabled = Services.prefs.getBoolPref(NOTES_ZEN, false);
+      Services.prefs.setBoolPref(NOTES_NATIVE, enabled);
+    } catch (e) {
+      // ignore
+    }
+  }
+  _syncTabNotes();
+  Services.prefs.addObserver(NOTES_ZEN, {
+    observe() { _syncTabNotes(); }
   });
 
   let customZenElements = [

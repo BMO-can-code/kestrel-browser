@@ -128,10 +128,39 @@ ${focused} {
 
     if ((boostData.customCSS || "").trim() != "") {
       style += `/* USER CSS */\n`;
-      style += `${boostData.customCSS || ""}\n`;
+      style += `${this.#sanitizeCSS(boostData.customCSS)}\n`;
     }
 
     return style;
+  }
+
+  /**
+   * Sanitizes user-supplied CSS before injection.
+   * Removes @import, url() references, and JavaScript expressions to prevent
+   * data exfiltration and code execution via boosted stylesheets.
+   *
+   * @param {string} css - Raw CSS text
+   * @returns {string} Sanitized CSS text
+   * @private
+   */
+  #sanitizeCSS(css) {
+    let sanitized = String(css || "");
+    // Strip @import rules
+    sanitized = sanitized.replace(/@import\b[^;{]*;?/gi, "");
+    // Strip url() / image-set() / image() references
+    sanitized = sanitized.replace(
+      /\b(?:url|image-set|image)\s*\([^)]*\)/gi,
+      "none"
+    );
+    // Strip expression() and javascript: directives (IE legacy + XSS)
+    sanitized = sanitized.replace(
+      /\bexpression\s*\([^)]*\)/gi,
+      ""
+    );
+    sanitized = sanitized.replace(/\bjavascript\s*:[^;}]*/gi, "");
+    // Strip behavior directives (IE legacy)
+    sanitized = sanitized.replace(/\bbehavior\s*:[^;}]*/gi, "");
+    return sanitized;
   }
 
   /**
